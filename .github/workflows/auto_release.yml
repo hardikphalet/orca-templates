@@ -1,0 +1,45 @@
+name: Auto Release Workflow
+
+on:
+  push:
+    paths:
+      - "/templates/versions/**"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Zip new directory
+        run: |
+          cd template
+          cd versions
+          new_dir=$(ls -td -- */ | head -n 1)
+          zip -r ../${new_dir%/}.zip ${new_dir%/}
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.run_number }}
+          release_name: Release ${{ github.run_number }}
+          body: |
+            Changes in this Release:
+            - New Version
+          draft: false
+          prerelease: false
+
+      - name: Upload Release Asset
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./${{ steps.create_release.outputs.tag_name }}.zip
+          asset_name: ${{ steps.create_release.outputs.tag_name }}.zip
+          asset_content_type: application/zip
