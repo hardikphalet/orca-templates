@@ -18,6 +18,7 @@ jobs:
         run: |
           cd templates
           cd versions
+          ls -al
           new_dir=$(ls -td -- */ | head -n 1)
           zip -r ../../${new_dir%/}.zip ${new_dir%/}
           echo "zipped_file_name=${new_dir%/}.zip" >> $GITHUB_OUTPUT
