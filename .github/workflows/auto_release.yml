@@ -20,7 +20,7 @@ jobs:
           cd versions
           new_dir=$(ls -td -- */ | head -n 1)
           zip -r ../../${new_dir%/}.zip ${new_dir%/}
-          echo "zipped_file_name=$new_dir\n" >> $GITHUB_OUTPUT
+          echo "zipped_file_name=$new_dir" >> $GITHUB_OUTPUT
 
       - name: Create Release
         id: create_release
