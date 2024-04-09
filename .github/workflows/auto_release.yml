@@ -15,7 +15,7 @@ jobs:
 
       - name: Zip new directory
         run: |
-          cd template
+          cd templates
           cd versions
           new_dir=$(ls -td -- */ | head -n 1)
           zip -r ../${new_dir%/}.zip ${new_dir%/}
