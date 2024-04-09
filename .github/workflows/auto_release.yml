@@ -16,10 +16,9 @@ jobs:
       - name: Zip new directory
         id: zip
         run: |
-          cd templates
-          cd versions
-          ls -al
-          new_dir=$(ls -td -- */ | head -n 1)
+          cd templates/versions
+          new_dir=$(find . -type d -name "*-test" | sort -V | tail -n 1)
+          new_dir=$(echo "$new_dir" | sed 's/^\.\///')
           zip -r ../../${new_dir%/}.zip ${new_dir%/}
           echo "zipped_file_name=${new_dir%/}.zip" >> $GITHUB_OUTPUT
 

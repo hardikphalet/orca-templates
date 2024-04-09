@@ -1,0 +1,3 @@
+new_dir=$(find . -type d -name "*-test" | sort -V | tail -n 1)
+          new_dir=$(echo "$new_dir" | sed 's/^\.\///')
+          zip -r ../../${new_dir%/}.zip ${new_dir%/}
