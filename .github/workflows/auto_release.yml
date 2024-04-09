@@ -6,17 +6,21 @@ jobs:
   build:
     permissions: write-all
     runs-on: ubuntu-latest
+    outputs:
+      zipped_file_name: ${{ steps.zip.outputs.zipped_file_name }}
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
       - name: Zip new directory
+        id: zip
         run: |
           cd templates
           cd versions
           new_dir=$(ls -td -- */ | head -n 1)
-          zip -r ../${new_dir%/}.zip ${new_dir%/}
+          zip -r ../../${new_dir%/}.zip ${new_dir%/}
+          echo "zipped_file_name=$new_dir\n" >> $GITHUB_OUTPUT
 
       - name: Create Release
         id: create_release
@@ -38,6 +42,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: ./${{ steps.create_release.outputs.tag_name }}.zip
+          asset_path: ./${{ steps.zip.outputs.zipped_file_name }}.zip
           asset_name: ${{ steps.create_release.outputs.tag_name }}.zip
           asset_content_type: application/zip
