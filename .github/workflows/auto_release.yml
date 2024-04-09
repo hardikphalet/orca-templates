@@ -3,7 +3,7 @@ name: Auto Release Workflow
 on:
   push:
     paths:
-      - "/templates/versions/**"
+      - "/templates/versions/*"
 
 jobs:
   build:
