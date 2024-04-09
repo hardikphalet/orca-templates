@@ -1,10 +1,6 @@
 name: Auto Release Workflow
 
-on:
-  push:
-    branches: [main]
-    paths:
-      - "/templates/versions/**"
+on: [push]
 
 jobs:
   build:
